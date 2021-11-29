@@ -55,6 +55,6 @@ stages:
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'LW-FE-Manual-Full'
+              ArtifactName: 'Sample-React-Repo'
               publishLocation: 'Container'
 
