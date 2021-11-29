@@ -1,32 +1,38 @@
-apiVersion : apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-react-repo
+  name: sample-react-app-deployment
+  labels:
+    app: sample-react-app
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: sample-react-app
   template:
     metadata:
       labels:
-        app: sample-react-repo
-    selector:
-      matchLabels:
-        app: sample-react-repo
-
+        app: sample-react-app
     spec:
       containers:
-        - name: sample-react-repo
+        - name: sample-react-app
           image: lwfecr.azurecr.io/sample-react-repo
           ports:
-          - containerPort: 80
-
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: sample-react-repo
+  name: sample-react-app-loadbalancer-service
+  labels:
+    app: sample-react-app
 spec:
-    type: LoadBalancer
-    ports:
-    - port: 80 
-    selector:
-        app: sample-react-repo
+  type: LoadBalancer
+  selector:
+    app: sample-react-app
+  ports:
+    - port: 80
+      targetPort: 80
+
+
+
