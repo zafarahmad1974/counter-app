@@ -4,9 +4,6 @@ metadata:
   name: sample-react-app
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app: sample-react-app
   template:
     metadata:
       labels:
