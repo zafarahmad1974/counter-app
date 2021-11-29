@@ -32,13 +32,15 @@ stages:
               tags: |
                 $(tag)
                 $(Build.SourceVersion)
+
           - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+          
           - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
 
-          - upload: manifests
+          - publish: manifests
             artifact: manifests
 
-          # Task-2: Copy kube-manifest files to Build Artifact Directory
+          # Task-2: Copy manifest files to Build Artifact Directory
           - task: CopyFiles@2
             inputs:
               SourceFolder: '$(System.DefaultWorkingDirectory)/manifests'
