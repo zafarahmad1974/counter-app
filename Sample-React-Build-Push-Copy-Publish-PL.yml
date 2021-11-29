@@ -1,0 +1,55 @@
+# Stages
+# Stage-1:
+  # Task-1: Build Docker Image and push to Azure Container Registry ACR
+  # Task-2: Copy kube-manifest files to Build Artifact Directory
+  # Task-3: Publish build articats to Azure Pipelines
+# Pipeline Hierarchial Flow: Stages -> Stage -> Jobs -> Job -> Steps -> Task1, Task2, Task3  
+
+trigger:
+- master
+
+variables:
+  tag: $(Build.BuildId)
+
+stages:
+  - stage: Build
+    displayName: Build Image
+    jobs:
+      - job: Build
+        displayName: Build Docker Image
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+
+          # Task-1: Build Docker Image and push to Azure Container Registry ACR
+          - task: Docker@2
+            inputs:
+              containerRegistry: 'Sample-React-Service-Connection'
+              buildContext: '$(build.SourcesDirectory)'
+              command: buildAndPush
+              Dockerfile: '$(**/Dockerfile)'
+              repository: 'Sample-React-Repo'
+              tags: |
+                $(tag)
+                $(Build.SourceVersion)
+          - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+          - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
+
+          # Task-2: Copy kube-manifest files to Build Artifact Directory
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: '$(System.DefaultWorkingDirectory)/manifests'
+              Contents: '**'
+              TargetFolder: '$(Build.ArtifactStagingDirectory)'
+              OverWrite: true
+
+          # List files from Build Artifact Staging Directory - After Copy
+          - bash: echo After copying to Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory)  
+      
+          # Task-3: Publish build articats to Azure Pipelines
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'LW-FE-Manual-Full'
+              publishLocation: 'Container'
+
