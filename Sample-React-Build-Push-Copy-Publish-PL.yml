@@ -27,7 +27,7 @@ stages:
               containerRegistry: 'Sample-React-Service-Connection'
               buildContext: '$(build.SourcesDirectory)'
               command: buildAndPush
-              Dockerfile: '$(**/Dockerfile)'
+              Dockerfile: '**/Dockerfile'
               repository: 'Sample-React-Repo'
               tags: |
                 $(tag)
