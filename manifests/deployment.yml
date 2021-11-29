@@ -8,6 +8,10 @@ spec:
     metadata:
       labels:
         app: sample-react-app
+    selector:
+      matchLabels:
+        app: sample-react-app
+
     spec:
       containers:
         - name: sample-react-app
