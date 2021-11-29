@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: sample-react-app
-          image: lwfecr.azurecr.io/sample-react-app
+          image: lwfecr.azurecr.io/sample-react-repo
           ports:
           - containerPort: 80
 
